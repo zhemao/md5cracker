@@ -49,9 +49,9 @@ assign iaddr = ireg;
 
 fcalc fc (
     .sel (ireg[5:4]),
-    .b (b),
-    .c (c),
-    .d (d),
+    .b (breg),
+    .c (creg),
+    .d (dreg),
     .f (f)
 );
 

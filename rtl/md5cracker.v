@@ -3,4 +3,8 @@ module md5cracker (
     output [3:0] leds
 );
 
+chunk_cruncher cc (
+    .clk (clock_50)
+);
+
 endmodule

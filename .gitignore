@@ -21,6 +21,7 @@
 /.sopc_builder
 /sopc_builder_log.txt
 /nios_system_log.txt
+greybox_tmp
 
 *.html
 *.bsf
@@ -49,5 +50,3 @@ obj
 modules.order
 Module.symvers
 .tmp_versions
-
-/software/blinker_us/blinker

@@ -1,17 +1,10 @@
 module chunk_cruncher (
     input clk,
     input reset,
+    input start,
     output done,
 
-    input [31:0] a0,
-    input [31:0] b0,
-    input [31:0] c0,
-    input [31:0] d0,
-
-    output [31:0] a1,
-    output [31:0] b1,
-    output [31:0] c1,
-    output [31:0] d1,
+    output [127:0] digest,
 
     output [5:0]  iaddr,
     input  [31:0] kdata,
@@ -21,15 +14,22 @@ module chunk_cruncher (
     input  [31:0] mdata
 );
 
+parameter INITA = 32'h67452301;
+parameter INITB = 32'hefcdab89;
+parameter INITC = 32'h98badcfe;
+parameter INITD = 32'h10325476;
+
+reg [31:0] a0;
+reg [31:0] b0;
+reg [31:0] c0;
+reg [31:0] d0;
+
 reg [31:0] areg;
 reg [31:0] breg;
 reg [31:0] creg;
 reg [31:0] dreg;
 
-assign a1 = areg;
-assign b1 = breg;
-assign c1 = creg;
-assign d1 = dreg;
+assign digest = {a0, b0, c0, d0};
 
 reg [5:0] ireg;
 
@@ -66,54 +66,122 @@ leftrotate lr (
     .rotout (rotated)
 );
 
+parameter CRUNCH   = 2'b00;
+parameter FINALIZE = 2'b01;
+parameter FINISHED = 2'b10;
+
+reg [1:0] stage;
+
+assign done = (stage == FINISHED);
+
 reg [1:0] step;
 
-assign done = (step == 2'b11) && (ireg == 6'd63);
-
 always @(*) begin
-    case (step)
-        2'b00: begin
-            adda <= areg;
-            addb <= kdata;
-        end
-        2'b01: begin
-            adda <= freg;
-            addb <= mdata;
-        end
-        2'b10: begin
-            adda <= t0;
-            addb <= t1;
-        end
-        2'b11: begin
-            adda <= breg;
-            addb <= rotated;
-        end
-    endcase
+    if (stage == CRUNCH) begin
+        case (step)
+            2'b00: begin
+                adda <= areg;
+                addb <= kdata;
+            end
+            2'b01: begin
+                adda <= freg;
+                addb <= mdata;
+            end
+            2'b10: begin
+                adda <= t0;
+                addb <= t1;
+            end
+            2'b11: begin
+                adda <= breg;
+                addb <= rotated;
+            end
+        endcase
+    end else if (stage == FINALIZE) begin
+        case (step)
+            2'b00: begin
+                adda <= a0;
+                addb <= areg;
+            end
+            2'b01: begin
+                adda <= b0;
+                addb <= breg;
+            end
+            2'b10: begin
+                adda <= c0;
+                addb <= creg;
+            end
+            2'b11: begin
+                adda <= d0;
+                addb <= dreg;
+            end
+        endcase
+    end else begin
+        adda <= 32'd0;
+        addb <= 32'd0;
+    end
 end
 
 always @(posedge clk) begin
     if (reset) begin
+        a0 <= INITA;
+        b0 <= INITB;
+        c0 <= INITC;
+        d0 <= INITD;
+        stage <= CRUNCH;
+    end else if (start) begin
         areg <= a0;
         breg <= b0;
         creg <= c0;
         dreg <= d0;
         ireg <= 6'd0;
         step <= 2'b00;
-    end else case (step)
-        2'b00: begin
-            freg <= f;
-            t0 <= adds;
-        end
-        2'b01: t1 <= adds;
-        2'b10: t0 <= adds;
-        2'b11: if (ireg != 6'd63) begin
-            areg <= dreg;
-            breg <= adds;
-            creg <= breg;
-            dreg <= creg;
-            ireg <= ireg + 1'b1;
-        end
-    endcase
+    end else if (stage == CRUNCH) begin
+        case (step)
+            2'b00: begin
+                freg <= f;
+                t0 <= adds;
+                step <= 2'b01;
+            end
+            2'b01: begin
+                t1 <= adds;
+                step <= 2'b10;
+            end
+            2'b10: begin
+                t0 <= adds;
+                step <= 2'b11;
+            end
+            2'b11: if (ireg != 6'd63) begin
+                areg <= dreg;
+                breg <= adds;
+                creg <= breg;
+                dreg <= creg;
+                ireg <= ireg + 1'b1;
+                step <= 2'b00;
+            end else begin
+                step <= 2'b00;
+                stage <= FINALIZE;
+            end
+        endcase
+    end else if (stage == FINALIZE) begin
+        case (step)
+            2'b00: begin
+                a0 <= adds;
+                step <= 2'b01;
+            end
+            2'b01: begin
+                b0 <= adds;
+                step <= 2'b10;
+            end
+            2'b10: begin
+                c0 <= adds;
+                step <= 2'b11;
+            end
+            2'b11: begin
+                d0 <= adds;
+                stage <= FINISHED;
+            end
+        endcase
+    end
 end
 
 endmodule

@@ -39,11 +39,16 @@ void reverse_if_needed(uint8_t *bytes, int count)
 	}
 }
 
-int main(void)
+int main(int argc, char *argv[])
 {
 	uint8_t bytes[BUFSIZE];
 	uint32_t *words = (uint32_t *) bytes;
 	int i, len;
+
+	if (argc < 2) {
+		printf("Usage: %s regname\n", argv[0]);
+		exit(EXIT_FAILURE);
+	}
 
 	memset(bytes, 0, BUFSIZE);
 	len = fread(bytes, 1, BUFSIZE - 4, stdin);
@@ -53,23 +58,12 @@ int main(void)
 	}
 	bytes[len] = 0x80;
 
-	printf("Length: %d\n", len);
-
-	printf("Actual: ");
-
-	for (i = 0; i < len; i++)
-		printf("%02x ", bytes[i]);
-	printf("\n");
-
-	reverse_if_needed(bytes, len);
+	reverse_if_needed(bytes, len + 1);
 
 	words[NUMWORDS - 1] = len;
 
-	printf("Verilog: 512'h");
-
-	for (i = NUMWORDS - 1; i >= 0; i--)
-		printf("%08x", words[i]);
-	printf("\n");
+	for (i = 0; i < NUMWORDS; i++)
+		printf("%s[%d] = 32'h%08x;\n", argv[1], i, words[i]);
 
 	return 0;
 }

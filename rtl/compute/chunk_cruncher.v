@@ -29,7 +29,7 @@ reg [31:0] breg;
 reg [31:0] creg;
 reg [31:0] dreg;
 
-assign digest = {a0, b0, c0, d0};
+assign digest = {d0, c0, b0, a0};
 
 reg [5:0] ireg;
 

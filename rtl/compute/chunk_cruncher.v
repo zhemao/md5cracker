@@ -45,7 +45,8 @@ reg [31:0] t1;
 
 wire [31:0] rotated;
 
-assign iaddr = ireg;
+wire [31:0] inext = ireg + 1'b1;
+assign iaddr = inext;
 
 fcalc fc (
     .sel (ireg[5:4]),
@@ -127,7 +128,8 @@ always @(posedge clk) begin
         b0 <= INITB;
         c0 <= INITC;
         d0 <= INITD;
-        stage <= CRUNCH;
+        ireg <= 6'd63;
+        stage <= FINISHED;
     end else if (start) begin
         areg <= a0;
         breg <= b0;
@@ -135,6 +137,7 @@ always @(posedge clk) begin
         dreg <= d0;
         ireg <= 6'd0;
         step <= 2'b00;
+        stage <= CRUNCH;
     end else if (stage == CRUNCH) begin
         case (step)
             2'b00: begin
@@ -155,7 +158,7 @@ always @(posedge clk) begin
                 breg <= adds;
                 creg <= breg;
                 dreg <= creg;
-                ireg <= ireg + 1'b1;
+                ireg <= inext;
                 step <= 2'b00;
             end else begin
                 step <= 2'b00;

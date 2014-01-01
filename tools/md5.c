@@ -90,4 +90,5 @@ void compute_onec(uint32_t *registers, uint8_t i,
 	registers[1] = b + left_rotate(sum, s[i]);
 	registers[2] = b;
 	registers[3] = c;
+	registers[4] = sum;
 }

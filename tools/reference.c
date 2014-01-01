@@ -43,7 +43,7 @@ int main(void)
 	uint32_t b0 = 0xefcdab89;
 	uint32_t c0 = 0x98badcfe;
 	uint32_t d0 = 0x10325476;
-	uint32_t registers[4] = {a0, b0, c0, d0};
+	uint32_t registers[5] = {a0, b0, c0, d0, 0};
 	uint8_t digest[16];
 
 	len = fread(bytes, 1, BUFSIZE - 5, stdin);
@@ -59,7 +59,7 @@ int main(void)
 		for (j = 0; j < 4; j++) {
 			printf("%c = %x, ", 97 + j, registers[j]);
 		}
-		printf("\n");
+		printf("sum = %x\n", registers[4]);
 	}
 
 	a0 = registers[0] + a0;

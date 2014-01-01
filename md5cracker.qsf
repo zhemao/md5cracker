@@ -78,3 +78,4 @@ set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id md5unit_tb
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "5640 ns" -section_id md5unit_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME md5unit_tb -section_id md5unit_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE sim/md5unit_tb.sv -section_id md5unit_tb
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_SETUP_SCRIPT sim/md5unit_sim.tcl -section_id eda_simulation

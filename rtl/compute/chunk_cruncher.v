@@ -153,15 +153,17 @@ always @(posedge clk) begin
                 step <= 2'b11;
                 ireg <= inext;
             end
-            2'b11: if (ireg != 6'd0) begin
+            2'b11: begin
                 areg <= dreg;
                 breg <= adds;
                 creg <= breg;
                 dreg <= creg;
-                step <= 2'b00;
-            end else begin
-                step <= 2'b00;
-                stage <= FINALIZE;
+                if (ireg != 6'd0) begin
+                    step <= 2'b00;
+                end else begin
+                    step <= 2'b00;
+                    stage <= FINALIZE;
+                end
             end
         endcase
     end else if (stage == FINALIZE) begin

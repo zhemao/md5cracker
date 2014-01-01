@@ -32,10 +32,6 @@ end
 
 integer i;
 initial begin
-// little endian and padded, so the original string is
-// 08 02 68 01 bb 80 ab 13 30 2c 8b cb 82 75 65 b9
-// 48 3c 79 a3 be 26 3f 10 c4 da 78 0b 48 33 43 5c
-// 87 92 e9 4d 7c be f0 ef 33 85
     testsequence[0] = 32'h01680208;
     testsequence[1] = 32'h13ab80bb;
     testsequence[2] = 32'hcb8b2c30;
@@ -50,8 +46,8 @@ initial begin
     testsequence[11] = 32'h00000000;
     testsequence[12] = 32'h00000000;
     testsequence[13] = 32'h00000000;
-    testsequence[14] = 32'h00000000;
-    testsequence[15] = 32'h0000002a;
+    testsequence[14] = 32'h00000150;
+    testsequence[15] = 32'h00000000;
 
     reset = 1'b1;
     write = 1'b0;

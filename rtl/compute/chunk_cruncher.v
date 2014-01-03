@@ -141,20 +141,24 @@ always @(posedge clk) begin
         case (step)
             2'b00: begin
                 freg <= f;
+                // t0 = areg + kdata
                 t0 <= adds;
                 step <= 2'b01;
             end
             2'b01: begin
+                // t1 = freg + mdata
                 t1 <= adds;
                 step <= 2'b10;
             end
             2'b10: begin
+                // t0 = t0 + t1
                 t0 <= adds;
                 step <= 2'b11;
                 ireg <= inext;
             end
             2'b11: begin
                 areg <= dreg;
+                // breg = breg + rotate(t0, sdata)
                 breg <= adds;
                 creg <= breg;
                 dreg <= creg;
@@ -169,18 +173,22 @@ always @(posedge clk) begin
     end else if (stage == FINALIZE) begin
         case (step)
             2'b00: begin
+                // a0 += areg
                 a0 <= adds;
                 step <= 2'b01;
             end
             2'b01: begin
+                // b0 += breg
                 b0 <= adds;
                 step <= 2'b10;
             end
             2'b10: begin
+                // c0 += creg
                 c0 <= adds;
                 step <= 2'b11;
             end
             2'b11: begin
+                // d0 += dreg
                 d0 <= adds;
                 stage <= FINISHED;
             end

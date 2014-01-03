@@ -16,6 +16,7 @@ always @(*) begin
     case (i[5:4])
         // 0 <= i <= 15
         2'b00: begin
+            // g = i
             doshift <= 1'b0;
             sub <= 1'b0;
             shiftby <= 2'b0;
@@ -23,6 +24,7 @@ always @(*) begin
         end
         // 16 <= i <= 31
         2'b01: begin
+            // g = 5 * i + 1
             doshift <= 1'b1;
             sub <= 1'b0;
             shiftby <= 2'b10;
@@ -30,6 +32,7 @@ always @(*) begin
         end
         // 32 <= i <= 47
         2'b10: begin
+            // g = 3 * i + 5
             doshift <= 1'b1;
             sub <= 1'b0;
             shiftby <= 2'b01;
@@ -37,6 +40,7 @@ always @(*) begin
         end
         // 48 <= i <= 63
         2'b11: begin
+            // g = 7 * i
             doshift <= 1'b1;
             sub <= 1'b1;
             shiftby <= 2'b11;

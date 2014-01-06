@@ -45,7 +45,7 @@ reg [31:0] t1;
 
 wire [31:0] rotated;
 
-wire [31:0] inext = ireg + 1'b1;
+wire [5:0] inext = ireg + 1'b1;
 assign iaddr = ireg;
 
 fcalc fc (

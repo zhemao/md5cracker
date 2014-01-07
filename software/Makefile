@@ -1,6 +1,8 @@
 CFLAGS=-Wall -O2
 
-all: padandprint reference
+hwmd5sum: hwmd5sum.c fpga_control.o md5.o
+
+tools: padandprint reference
 
 padandprint: padandprint.c md5.o
 
@@ -10,4 +12,4 @@ reference: reference.c md5.o
 	$(CC) -c $(CFLAGS) $<
 
 clean:
-	rm -f padandprint
+	rm -f padandprint reference hwmd5sum *.o

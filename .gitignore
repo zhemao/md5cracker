@@ -53,4 +53,5 @@ Module.symvers
 
 /software/padandprint
 /software/reference
+/software/hwmd5sum
 *.ver

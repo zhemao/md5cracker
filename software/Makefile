@@ -1,4 +1,5 @@
 CFLAGS=-Wall -O2
+CC=$(CROSS_COMPILE)gcc
 
 hwmd5sum: hwmd5sum.c fpga_control.o md5.o
 

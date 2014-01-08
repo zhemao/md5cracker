@@ -38,6 +38,7 @@ int main(void)
 	uint32_t digest[4];
 	uint32_t *words = (uint32_t *) bytes;
 
+	printf("initializing fpga control\n");
 	if (init_fpga_control(fpga)) {
 		fprintf(stderr, "Could not initialize fpga controller\n");
 		exit(EXIT_FAILURE);
@@ -52,24 +53,24 @@ int main(void)
 
 	padbuffer(bytes, len);
 
+	printf("looking for an available unit\n");
 	unit = find_available_unit(fpga);
 	if (unit < 0) {
 		fprintf(stderr, "Could not get available FPGA unit\n");
 		status = EXIT_FAILURE;
 		goto cleanup;
 	}
+	printf("found unit %d\n");
 
-	printf("resetting\n");
+	printf("setting up computation\n");
+
 	fpga_reset_unit(fpga, unit);
-	printf("copying input\n");
 	fpga_copy_input(fpga, words, unit);
-	printf("starting\n");
 	fpga_start_unit(fpga, unit);
 
 	printf("waiting for completion\n");
 	while (!fpga_unit_done(fpga, unit));
 
-	printf("copying output\n");
 	fpga_copy_output(fpga, digest, unit);
 	print_digest(digest);
 

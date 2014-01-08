@@ -20,8 +20,8 @@ assign md5_start = start_reg;
 assign md5_reset = reset_reg;
 
 always @(posedge clk) begin
-    start_reg <= 31'd0;
-    reset_reg <= 31'd0;
+    start_reg <= 32'd0;
+    reset_reg <= 32'd0;
     if (avs_write) begin
         case (avs_address)
             2'b00: reset_reg <= avs_writedata;

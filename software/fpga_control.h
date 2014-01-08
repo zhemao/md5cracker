@@ -3,19 +3,21 @@
 
 #define LWHPS2FPGA_DEVICE "/dev/lwhps2fpga0"
 #define NUM_MD5_UNITS 32
+
+#define MD5_INPUT_OFFSET 0x0
+#define MD5_OUTPUT_OFFSET 0x800
+#define MD5_CONTROL_OFFSET 0xa00
+
 #define MD5_INPUT_SIZE 16
 #define MD5_OUTPUT_SIZE 4
 
 #include <stdint.h>
 
-struct device_mem {
-	uint32_t md5input[512];
-	uint32_t md5output[128];
-	uint32_t md5control[3];
-};
-
 struct fpga_control {
-	struct device_mem *mem;
+	void *mem;
+	volatile uint32_t *md5input;
+	volatile uint32_t *md5output;
+	volatile uint32_t *md5control;
 	int fd;
 };
 

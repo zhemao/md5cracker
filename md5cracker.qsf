@@ -61,17 +61,15 @@ set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
 set_location_assignment PIN_K14 -to clock_50
 
 set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH md5unit_tb -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH md5group_tb -section_id eda_simulation
 set_global_assignment -name EDA_TEST_BENCH_NAME md5unit_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id md5unit_tb
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "5640 ns" -section_id md5unit_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME md5unit_tb -section_id md5unit_tb
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_SETUP_SCRIPT sim/md5unit_sim.tcl -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_SETUP_SCRIPT sim/md5group_sim.tcl -section_id eda_simulation
 set_global_assignment -name EDA_TEST_BENCH_NAME gcalc_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id gcalc_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME gcalc_tb -section_id gcalc_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE sim/md5unit_tb.sv -section_id md5unit_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE sim/gcalc_tb.sv -section_id gcalc_tb
 set_global_assignment -name QIP_FILE soc_system/synthesis/soc_system.qip
 set_global_assignment -name VERILOG_FILE rtl/md5group.v
 set_global_assignment -name VERILOG_FILE rtl/md5unit.v
@@ -217,3 +215,9 @@ set_global_assignment -name UNIPHY_SEQUENCER_DQS_CONFIG_ENABLE ON
 set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
 set_global_assignment -name ECO_REGENERATE_REPORT ON
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name EDA_TEST_BENCH_FILE sim/md5unit_tb.sv -section_id md5unit_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE sim/gcalc_tb.sv -section_id gcalc_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME md5group_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id md5group_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME md5group_tb -section_id md5group_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE sim/md5group_tb.sv -section_id md5group_tb

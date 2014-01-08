@@ -12,27 +12,19 @@
    element $${FILENAME}
    {
    }
-   element md5_output_0.avalon_slave_0
-   {
-      datum baseAddress
-      {
-         value = "2048";
-         type = "String";
-      }
-   }
-   element md5_input_0.avalon_slave_0
-   {
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
    element md5_control_0.avalon_slave_0
    {
       datum baseAddress
       {
          value = "2560";
+         type = "String";
+      }
+   }
+   element md5_output_0.avalon_slave_0
+   {
+      datum baseAddress
+      {
+         value = "2048";
          type = "String";
       }
    }
@@ -97,13 +89,13 @@
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
  <interface name="memory" internal="hps_0.memory" type="conduit" dir="end" />
  <interface
-   name="md5_output"
-   internal="md5_output_0.conduit_end"
+   name="md5_control"
+   internal="md5_control_0.conduit_end"
    type="conduit"
    dir="end" />
  <interface
-   name="md5_control"
-   internal="md5_control_0.conduit_end"
+   name="md5_output"
+   internal="md5_output_0.conduit_end"
    type="conduit"
    dir="end" />
  <interface
@@ -592,6 +584,11 @@
    start="clk_0.clk"
    end="hps_0.h2f_lw_axi_clock" />
  <connection
+   kind="reset"
+   version="13.1"
+   start="hps_0.h2f_reset"
+   end="clk_0.clk_in_reset" />
+ <connection
    kind="avalon"
    version="13.1"
    start="hps_0.h2f_lw_axi_master"
@@ -600,6 +597,21 @@
   <parameter name="baseAddress" value="0x0a00" />
   <parameter name="defaultConnection" value="false" />
  </connection>
+ <connection
+   kind="reset"
+   version="13.1"
+   start="clk_0.clk_reset"
+   end="md5_control_0.reset" />
+ <connection
+   kind="clock"
+   version="13.1"
+   start="clk_0.clk"
+   end="md5_control_0.clock" />
+ <connection
+   kind="reset"
+   version="13.1"
+   start="clk_0.clk_reset"
+   end="md5_output_0.reset" />
  <connection
    kind="avalon"
    version="13.1"
@@ -610,30 +622,10 @@
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
-   kind="reset"
-   version="13.1"
-   start="clk_0.clk_reset"
-   end="md5_control_0.reset" />
- <connection
-   kind="reset"
-   version="13.1"
-   start="clk_0.clk_reset"
-   end="md5_output_0.reset" />
- <connection
-   kind="clock"
-   version="13.1"
-   start="clk_0.clk"
-   end="md5_control_0.clock" />
- <connection
    kind="clock"
    version="13.1"
    start="clk_0.clk"
    end="md5_output_0.clock" />
- <connection
-   kind="reset"
-   version="13.1"
-   start="hps_0.h2f_reset"
-   end="clk_0.clk_in_reset" />
  <connection
    kind="avalon"
    version="13.1"

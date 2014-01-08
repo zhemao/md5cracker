@@ -69,8 +69,8 @@ soc_system soc (
     .md5_control_start   (md5_start),
     .md5_control_reset   (md5_reset),
     .md5_control_done    (md5_done),
-    .md5_input_data      (md5_writedata),
-    .md5_input_addr      (md5_writeaddr),
+    .md5_input_writedata      (md5_writedata),
+    .md5_input_writeaddr      (md5_writeaddr),
     .md5_input_write     (md5_write)
 );
 

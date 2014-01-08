@@ -7,15 +7,16 @@
 #include "fpga_control.h"
 
 #define PAGE_SIZE sysconf(_SC_PAGESIZE)
+#define LWHPS2FPGA_BASE 0xff200000
 
 int init_fpga_control(struct fpga_control *fpga)
 {
-	fpga->fd = open(LWHPS2FPGA_DEVICE, O_RDWR);
+	fpga->fd = open("/dev/mem", O_RDWR);
 	if (fpga->fd < 0)
 		return -1;
 
 	fpga->mem = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE,
-			MAP_SHARED, fpga->fd, 0);
+			MAP_SHARED, fpga->fd, LWHPS2FPGA_BASE);
 	if (fpga->mem == MAP_FAILED) {
 		close(fpga->fd);
 		return -1;
@@ -37,13 +38,13 @@ void release_fpga_control(struct fpga_control *fpga)
 void fpga_reset_unit(struct fpga_control *fpga, int unit)
 {
 	fpga->md5control[0] |= (1 << unit);
-	fpga->md5control[0] &= ~(1 << unit);
+	while ((fpga->md5control[0] >> unit) & 0x1);
 }
 
 void fpga_start_unit(struct fpga_control *fpga, int unit)
 {
 	fpga->md5control[1] |= (1 << unit);
-	fpga->md5control[1] &= ~(1 << unit);
+	while ((fpga->md5control[1] >> unit) & 0x1);
 }
 
 int fpga_unit_done(struct fpga_control *fpga, int unit)

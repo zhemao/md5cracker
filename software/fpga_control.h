@@ -1,7 +1,6 @@
 #ifndef __FPGA_CONTROL__
 #define __FPGA_CONTROL__
 
-#define LWHPS2FPGA_DEVICE "/dev/lwhps2fpga0"
 #define NUM_MD5_UNITS 32
 
 #define MD5_INPUT_OFFSET 0x0

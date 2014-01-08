@@ -32,7 +32,7 @@ void print_digest(uint32_t *digest)
 
 int main(void)
 {
-	int unit, len, status = 0;
+	int unit = 0, len, status = 0;
 	struct fpga_control fpga[1];
 	uint8_t bytes[BUFSIZE];
 	uint32_t digest[4];
@@ -53,19 +53,12 @@ int main(void)
 
 	padbuffer(bytes, len);
 
-	printf("looking for an available unit\n");
-	unit = find_available_unit(fpga);
-	if (unit < 0) {
-		fprintf(stderr, "Could not get available FPGA unit\n");
-		status = EXIT_FAILURE;
-		goto cleanup;
-	}
-	printf("found unit %d\n");
-
 	printf("setting up computation\n");
 
+	printf("resetting\n");
 	fpga_reset_unit(fpga, unit);
 	fpga_copy_input(fpga, words, unit);
+	printf("starting\n");
 	fpga_start_unit(fpga, unit);
 
 	printf("waiting for completion\n");

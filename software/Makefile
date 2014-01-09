@@ -9,6 +9,8 @@ padandprint: padandprint.c md5.o
 
 reference: reference.c md5.o
 
+reference_bench: reference_bench.c md5.o seq_gen.o
+
 %.o: %.c
 	$(CC) -c $(CFLAGS) $<
 

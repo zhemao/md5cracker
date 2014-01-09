@@ -54,4 +54,5 @@ Module.symvers
 /software/padandprint
 /software/reference
 /software/hwmd5sum
+/software/reference_bench
 *.ver
